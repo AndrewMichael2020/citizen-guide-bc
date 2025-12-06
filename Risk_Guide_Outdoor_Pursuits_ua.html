@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Розважливий Альпініст: Ризик та Повнота Життя</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Data Labels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
+    <!-- Chosen Palette: Deep Alpine Night -->
+    <!-- 
+        Background: #1C1917 (Stone 900) - Глибоке вугілля.
+        Text Main: #E7E5E4 (Stone 200) - Світлий камінь.
+        Accent: #F59E0B (Amber 500) - Бурштин/Вогонь ватри.
+        Data Highlight: #FF6B00 (Bright Orange).
+    -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1C1917; /* Stone 900 */
+            color: #E7E5E4; /* Stone 200 */
+        }
+
+        h1, h2, h3, h4, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 500px;
+            background-color: #292524; /* Stone 800 */
+            border: 1px solid #44403c;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+
+        /* Interactive Elements */
+        .persona-card {
+            transition: all 0.3s ease;
+        }
+        .persona-card:hover {
+            transform: translateX(4px);
+            background-color: #44403c; /* Stone 700 */
+            border-color: #F59E0B; /* Amber 500 */
+        }
+        .persona-active {
+            background-color: #292524; /* Stone 800 */
+            border-color: #F59E0B;
+            border-left-width: 4px;
+        }
+
+        .cycle-node {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cycle-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1C1917;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #44403c; 
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #57534E; 
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #F59E0B, #fbbf24);
+        }
+        
+        /* Reference Link Styling */
+        .ref-link {
+            color: white;
+            text-decoration: underline;
+            text-decoration-color: #57534E;
+            transition: color 0.2s;
+        }
+        .ref-link:hover {
+            color: #F59E0B;
+            text-decoration-color: #F59E0B;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-[#1C1917]/90 backdrop-blur-md border-b border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-amber-500 serif tracking-wide">Розважливий Альпініст</span>
+                </div>
+                <div class="hidden sm:flex items-center space-x-8 text-sm font-medium text-stone-400">
+                    <a href="#philosophy" class="hover:text-amber-500 transition-colors">Філософія</a>
+                    <a href="#spectrum" class="hover:text-amber-500 transition-colors">Спектр Ризику</a>
+                    <a href="#data" class="hover:text-amber-500 transition-colors">Дані</a>
+                    <a href="#grey-areas" class="hover:text-amber-500 transition-colors">Невідоме</a>
+                    <a href="#community" class="hover:text-amber-500 transition-colors">Спільнота</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Philosophy) -->
+    <header id="philosophy" class="relative pt-32 pb-20 sm:pt-40 sm:pb-32 bg-gradient-to-b from-stone-900 via-stone-900 to-[#191614]">
+        <div class="absolute inset-0 overflow-hidden opacity-20">
+            <!-- decorative gradient blob -->
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-amber-900 rounded-full blur-[100px]"></div>
+            <div class="absolute top-20 left-10 w-72 h-72 bg-stone-700 rounded-full blur-[80px]"></div>
+        </div>
+
+        <div class="relative max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold text-stone-100 mb-8 leading-tight">
+                Ризик, Ясність та <br/><span class="text-gradient">Повнота Життя</span>
+            </h1>
+            <p class="text-xl text-stone-300 mb-10 leading-relaxed serif italic max-w-2xl mx-auto">
+                "Гору неможливо підкорити, вона лише дозволяє пройти."
+            </p>
+            <p class="text-base sm:text-lg text-stone-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Чому ми шукаємо випробувань на висоті? Це пошук сенсу, спосіб випробувати межі власного духу та відчути велич природи. 
+                Але гори вимагають плати: <strong>розважливості</strong>. Цей путівник поєднує філософське "чому" зі статистичним "що", 
+                допомагаючи вам пройти шлях від підніжжя до вершини — і повернутися додому.
+            </p>
+            
+            <!-- PDF Link Block -->
+            <div class="mb-12 bg-stone-800/60 border border-stone-700 rounded-lg p-6 max-w-2xl mx-auto backdrop-blur-sm">
+                <h3 class="text-amber-500 font-bold mb-2">Читати повний "Громадський путівник"</h3>
+                <p class="text-sm text-stone-300 mb-4">
+                    Для глибшого занурення в статистику нещасних випадків, філософські засади та детальний аналіз ситуацій, що лягли в основу цього інструменту, ознайомтеся з повним документом <strong>"Dialogue on Climbing Risk"</strong>. Він надає важливий контекст того, чому ми повинні вимірювати те, чим керуємо.
+                </p>
+                <a href="https://andrewmichael2020.github.io/citizen-guide-bc/Dialogue_on_Climbing_Risk.pdf" target="_blank" class="inline-flex items-center px-6 py-2 bg-stone-700 hover:bg-stone-600 text-white text-sm font-medium rounded transition-colors border border-stone-600">
+                    <span class="mr-2">📄</span> Завантажити звіт (PDF)
+                </a>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#spectrum" class="px-8 py-3 bg-amber-600 text-white rounded-full font-semibold hover:bg-amber-700 transition shadow-lg shadow-amber-900/40 ring-2 ring-amber-600 ring-offset-2 ring-offset-stone-900">
+                    Визнач Свій Рівень
+                </a>
+                <a href="#data" class="px-8 py-3 bg-transparent text-stone-300 border border-stone-600 rounded-full font-medium hover:bg-stone-800 hover:text-white transition">
+                    Оціни Ризики
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-32">
+
+        <!-- SECTION 1: The Risk Spectrum (Persona Explorer) -->
+        <section id="spectrum" class="scroll-mt-24">
+            <div class="mb-10 border-l-4 border-amber-500 pl-6">
+                <h2 class="text-3xl sm:text-4xl font-bold text-stone-100 mb-4">Спектр Досвіду</h2>
+                <p class="text-stone-400 max-w-2xl text-lg">
+                    Ризик не є однаковим для всіх. Небезпеки, що чатують на новачка, суттєво відрізняються від викликів експедиційного альпініста. 
+                    <span class="text-amber-500">Оберіть свій рівень нижче</span>, щоб дізнатися про специфічні ризики та необхідні навички.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left Column: Persona Selector -->
+                <div class="lg:col-span-4 flex flex-col gap-2" id="persona-list">
+                    <!-- JS Injected -->
+                </div>
+
+                <!-- Right Column: Dynamic Content Panel -->
+                <div class="lg:col-span-8">
+                    <div class="bg-stone-800 border border-stone-700 rounded-2xl p-6 sm:p-10 shadow-2xl relative overflow-hidden transition-all duration-300 min-h-[500px]" id="persona-display">
+                        <!-- Decorative background element -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-stone-700/20 rounded-bl-full pointer-events-none"></div>
+
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 border-b border-stone-700 pb-6 relative z-10">
+                            <div>
+                                <h3 id="p-title" class="text-3xl font-bold text-amber-500 serif mb-1">Оберіть Рівень</h3>
+                                <p id="p-desc" class="text-stone-400 text-sm">Дослідіть ризики та стратегії захисту</p>
+                            </div>
+                            <span id="p-tag" class="mt-2 sm:mt-0 inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-stone-700 text-stone-300 border border-stone-600 uppercase tracking-widest">
+                                Гід
+                            </span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
+                            <!-- Risks -->
+                            <div>
+                                <h4 class="font-bold text-stone-200 mb-4 flex items-center text-lg">
+                                    <span class="w-8 h-8 rounded-full bg-red-900/30 text-red-500 flex items-center justify-center mr-3 text-sm">⚠</span> 
+                                    Головні Ризики
+                                </h4>
+                                <ul id="p-risks" class="space-y-3 text-stone-400 text-sm list-disc pl-2 marker:text-red-500/50">
+                                    <li>Оберіть профіль.</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Mitigation -->
+                            <div>
+                                <h4 class="font-bold text-stone-200 mb-4 flex items-center text-lg">
+                                    <span class="w-8 h-8 rounded-full bg-emerald-900/30 text-emerald-500 flex items-center justify-center mr-3 text-sm">🛡</span> 
+                                    Розважливий Захист та Навички
+                                </h4>
+                                <ul id="p-mitigation" class="space-y-3 text-stone-400 text-sm list-disc pl-2 marker:text-emerald-500/50">
+                                    <li>Оберіть профіль.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Philosophy Quote -->
+                        <div class="mt-10 bg-stone-900/50 rounded-xl p-6 border-l-4 border-amber-600 relative z-10">
+                            <h4 class="font-serif font-bold text-stone-300 mb-2 text-sm uppercase tracking-wider">Філософський Фокус</h4>
+                            <p id="p-philosophy" class="text-stone-300 italic text-lg leading-relaxed">
+                                "Гора відкривається тому, хто шукає."
+                            </p>
+                        </div>
+                        
+                        <!-- Stats Footer -->
+                        <div class="mt-8 pt-4 border-t border-stone-700 relative z-10 flex items-center">
+                            <span class="text-xs font-bold text-stone-500 uppercase tracking-widest mr-4">Реальність:</span>
+                            <p id="p-stat" class="text-sm text-stone-400 font-mono">
+                                --
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Data & Analytics -->
+        <section id="data" class="scroll-mt-24">
+            <div class="mb-12 text-center max-w-4xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-bold text-stone-100 mb-6">Реальність Ризику: Мовою Цифр</h2>
+                <p class="text-stone-400 text-lg">
+                    Ми часто боїмося не того, чого варто. Розуміння ймовірності допомагає перейти від страху до виважених дій.
+                    <br><br>
+                    <span class="inline-block px-4 py-2 bg-stone-800 rounded text-sm border border-stone-700">
+                        <em class="text-amber-500">"Статистика — це тінь гори: вона показує обриси, але не передає текстури."</em>
+                    </span>
+                </p>
+            </div>
+
+            <!-- Chart Row 1 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Chart 1: Fatality vs Injury Rates -->
+                <div class="bg-stone-900 rounded-xl p-1">
+                    <div class="flex justify-between items-center mb-6 px-2">
+                        <h3 class="text-xl font-bold text-stone-200">Оцінка ризику на 1000 км</h3>
+                        <div class="flex bg-stone-800 rounded-lg p-1">
+                            <button onclick="updateRiskChart('fatality')" id="btn-fatality" class="px-4 py-1.5 rounded-md text-sm font-medium transition-all bg-amber-600 text-white shadow">Смертельність</button>
+                            <button onclick="updateRiskChart('injury')" id="btn-injury" class="px-4 py-1.5 rounded-md text-sm font-medium transition-all text-stone-400 hover:text-stone-200">Травматизм</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="riskChart"></canvas>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-4 text-center px-4">
+                        *Логарифмічна концептуальна шкала. Технічний альпінізм має значно вищий ризик на км, ніж піший туризм.
+                    </p>
+                </div>
+
+                <!-- Chart 2: Demographics -->
+                <div class="bg-stone-900 rounded-xl p-1">
+                     <h3 class="text-xl font-bold text-stone-200 mb-6 px-2">Демографія та Середовище (Вибірка 2024)</h3>
+                     <div class="chart-container">
+                        <canvas id="demographicChart"></canvas>
+                     </div>
+                     <p class="text-xs text-stone-500 mt-4 text-center px-4">
+                        Джерело: Звіт про нещасні випадки 2024. Диспропорція вказує на відмінності у поведінці або участі.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: The Grey Areas (Text Expansion) -->
+        <section id="grey-areas" class="scroll-mt-24 bg-stone-800/50 rounded-3xl p-8 sm:p-12 border border-stone-800">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-stone-100 mb-8 flex items-center">
+                    "Сірі Зони"
+                    <span class="ml-4 text-sm font-normal text-stone-500 bg-stone-900 px-3 py-1 rounded-full border border-stone-700">Що приховують дані</span>
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Near Misses -->
+                    <div class="bg-stone-900 p-6 rounded-xl border-l-4 border-amber-500">
+                        <h3 class="text-xl font-bold text-amber-500 mb-3 serif">1. Тихі випадки "на волосині"</h3>
+                        <p class="text-stone-400 mb-4 leading-relaxed">
+                            Статистика рахує лише трагічні наслідки. На кожну смерть припадають десятки "майже аварій" — каменепад, що пролетів у сантиметрах, або зрив, який вдалося зупинити в останню мить.
+                        </p>
+                        <p class="text-stone-300 font-medium">
+                            Урок: <span class="text-stone-500 font-normal">Якщо ви пережили небезпеку і не проаналізували її — ви не навчилися, вам просто пощастило. Везіння має ліміт.</span>
+                        </p>
+                    </div>
+
+                    <!-- Climate -->
+                    <div class="bg-stone-900 p-6 rounded-xl border-l-4 border-blue-500">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3 serif">2. Мінливий Рельєф</h3>
+                        <p class="text-stone-400 mb-4 leading-relaxed">
+                            Історичні дані втрачають прогностичну силу. <span class="text-stone-200">Льодовики Вашингтона втратили ~40% об'єму</span> з 1980-х. Маршрути, безпечні десятиліття тому, тепер загрожують льодовими обвалами та каменепадами через танення мерзлоти.
+                        </p>
+                        <p class="text-stone-300 font-medium">
+                            Урок: <span class="text-stone-500 font-normal">Довіряйте поточним умовам, а не старим путівникам. Гора, на яку ви йдете сьогодні — це не та гора, що на фото з 1995 року.</span>
+                        </p>
+                    </div>
+
+                    <!-- Human Factor -->
+                    <div class="bg-stone-900 p-6 rounded-xl border-l-4 border-purple-500 md:col-span-2">
+                        <h3 class="text-xl font-bold text-purple-400 mb-3 serif">3. Людський фактор та Евристика</h3>
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <p class="text-stone-400 leading-relaxed flex-1">
+                                Аварії рідко є суто "об'єктивними" (випадкові сили природи). Часто це ланцюг рішень. 
+                                Разиючий гендерний розрив у смертності (134 чоловіків проти 40 жінок у вибірці 2024) свідчить, що чоловіки можуть бути більш схильні до "вершинної лихоманки" або ризикованої поведінки, тоді як жінки частіше пріоритезують безпеку групи.
+                            </p>
+                            <div class="flex-1 bg-stone-800 p-4 rounded-lg text-sm text-stone-300">
+                                <strong>Пастки мислення (Евристика):</strong>
+                                <ul class="list-disc pl-5 mt-2 space-y-1 text-stone-400">
+                                    <li><span class="text-stone-200">Звичка:</span> "Я ходив тут 10 разів." (Самовпевненість)</li>
+                                    <li><span class="text-stone-200">Дефіцит:</span> "Це мій єдиний вихідний." (Тиск часу)</li>
+                                    <li><span class="text-stone-200">Соціальний доказ:</span> "Інші йдуть туди." (Ефект натовпу)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Community & Interactive Cycle -->
+        <section id="community" class="scroll-mt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Left: Static Advice for Clubs -->
+                <div class="lg:col-span-5 space-y-6">
+                    <h2 class="text-3xl font-bold text-stone-100 serif">Для Клубів та Провідників</h2>
+                    <p class="text-stone-400 leading-relaxed">
+                        Клуби повинні організовувати не лише логістику, а й <em class="text-amber-500">мудрість</em>. 
+                        Упередженість у звітах про аварії викривлює наше сприйняття безпеки. Нам потрібна зміна культури.
+                    </p>
+                    
+                    <ul class="space-y-4 mt-6">
+                        <li class="bg-stone-800 p-4 rounded-lg border border-stone-700">
+                            <h4 class="font-bold text-stone-200 mb-1">Фіксуйте випадки "майже сталося"</h4>
+                            <p class="text-xs text-stone-400">Створіть анонімний портал для звітів про небезпечні ситуації. Хваліть за звіт, а не засуджуйте за помилку.</p>
+                        </li>
+                        <li class="bg-stone-800 p-4 rounded-lg border border-stone-700">
+                            <h4 class="font-bold text-stone-200 mb-1">Хваліть за рішення повернутися</h4>
+                            <p class="text-xs text-stone-400">Зробіть рішення про спуск (без вершини) шанованою навичкою. Вручайте нагороду за "Найсміливіше повернення".</p>
+                        </li>
+                        <li class="bg-stone-800 p-4 rounded-lg border border-stone-700">
+                            <h4 class="font-bold text-stone-200 mb-1">Регіональна Аналітика</h4>
+                            <p class="text-xs text-stone-400">Використовуйте локальні дані (наприклад, ~7 смертей від лавин на рік у Б.К.), щоб пояснити ризики новачкам.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Right: Interactive Cycle of Experience -->
+                <div class="lg:col-span-7">
+                    <div class="bg-stone-800/50 rounded-2xl p-6 sm:p-8 border border-stone-700 h-full">
+                        <h3 class="text-xl font-bold text-stone-200 mb-6 text-center">Коло Розважливого Досвіду</h3>
+                        <p class="text-center text-stone-500 text-sm mb-8">Натисніть на етап, щоб дізнатися більше.</p>
+
+                        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 relative">
+                            <!-- Connecting Line (Desktop) -->
+                            <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-stone-700 -z-0"></div>
+
+                            <!-- Step 1 -->
+                            <button onclick="updateCycle(0)" class="cycle-node relative z-10 flex-1 flex flex-col items-center group">
+                                <div id="cycle-dot-0" class="w-12 h-12 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-lg border-4 border-stone-800 shadow-xl ring-2 ring-amber-600 transition-all">1</div>
+                                <span class="mt-3 text-sm font-bold text-stone-300 group-hover:text-amber-500">Вишкіл</span>
+                            </button>
+
+                            <!-- Step 2 -->
+                            <button onclick="updateCycle(1)" class="cycle-node relative z-10 flex-1 flex flex-col items-center group">
+                                <div id="cycle-dot-1" class="w-12 h-12 rounded-full bg-stone-700 text-stone-400 flex items-center justify-center font-bold text-lg border-4 border-stone-800 shadow-xl hover:ring-2 hover:ring-amber-500 transition-all">2</div>
+                                <span class="mt-3 text-sm font-bold text-stone-500 group-hover:text-stone-300">Дія</span>
+                            </button>
+
+                            <!-- Step 3 -->
+                            <button onclick="updateCycle(2)" class="cycle-node relative z-10 flex-1 flex flex-col items-center group">
+                                <div id="cycle-dot-2" class="w-12 h-12 rounded-full bg-stone-700 text-stone-400 flex items-center justify-center font-bold text-lg border-4 border-stone-800 shadow-xl hover:ring-2 hover:ring-amber-500 transition-all">3</div>
+                                <span class="mt-3 text-sm font-bold text-stone-500 group-hover:text-stone-300">Рефлексія</span>
+                            </button>
+                             <!-- Step 4 -->
+                             <button onclick="updateCycle(3)" class="cycle-node relative z-10 flex-1 flex flex-col items-center group">
+                                <div id="cycle-dot-3" class="w-12 h-12 rounded-full bg-stone-700 text-stone-400 flex items-center justify-center font-bold text-lg border-4 border-stone-800 shadow-xl hover:ring-2 hover:ring-amber-500 transition-all">4</div>
+                                <span class="mt-3 text-sm font-bold text-stone-500 group-hover:text-stone-300">Наставництво</span>
+                            </button>
+                        </div>
+
+                        <!-- Dynamic Cycle Content -->
+                        <div class="mt-10 bg-stone-900 rounded-xl p-6 border border-stone-700 transition-all duration-300" id="cycle-content-box">
+                            <h4 id="cycle-title" class="text-lg font-bold text-amber-500 mb-2">Підготовка та Вишкіл</h4>
+                            <p id="cycle-text" class="text-stone-400 text-sm leading-relaxed">
+                                Тут формується 90% безпеки. Це фізична підготовка, перевірка погоди саме для висоти (а не для міста) та пакування "10 Речей Першої Необхідності".
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- References -->
+        <section class="border-t border-stone-800 pt-12 pb-20">
+            <h3 class="text-xl font-bold text-white mb-6">Джерела та Рекомендована Література</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-xs text-white">
+                <div class="space-y-3">
+                    <p>David C Pearson - <a href="#" class="ref-link">Risk, Chance & Choice: A Guide to Life’s Uncertainties</a></p>
+                    <p><a href="#" class="ref-link">Number of 2019 B.C. backcountry deaths double the annual average</a></p>
+                    <p><a href="#" class="ref-link">Injury and Illness on the West Coast Trail</a></p>
+                    <p><a href="#" class="ref-link">Epidemiology of mountain search and rescue (Banff/Yoho)</a></p>
+                    <p>Will Gadd - <a href="#" class="ref-link">Scrambling and Soloing to Death</a></p>
+                    <p>Reddit - <a href="#" class="ref-link">All encompassing hiking safety discussion (r/HikingAlberta)</a></p>
+                </div>
+                <div class="space-y-3">
+                    <p>Friends of Kananaskis Country - <a href="#" class="ref-link">What to think about</a></p>
+                    <p><a href="#" class="ref-link">9 Surprising Patterns in 210 Climbing Accidents Last Year</a></p>
+                    <p><a href="#" class="ref-link">Mortality in Mountain Sports Activities (Narrative Review)</a></p>
+                    <p>Steph Abegg - <a href="#" class="ref-link">Mountaineering Accident Statistics</a></p>
+                    <p><a href="#" class="ref-link">Avalanches expected after 5 fatalities this season in B.C.</a></p>
+                    <p>NIH - <a href="#" class="ref-link">Patterns of death among avalanche fatalities</a></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-950 text-stone-600 py-12 border-t border-stone-900">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="font-serif italic mb-4 text-stone-500">"Гори вимагають поваги — і тим, хто її виявляє, вони дарують не лише ризик, а й неоціненний життєвий досвід."</p>
+            <p class="text-xs">&copy; 2025 Посібник з Розважливого Альпінізму. Синтезовано на основі даних спільноти.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- DATA: Personas (Ukrainian) ---
+        const personas = [
+            {
+                id: 'first-timer',
+                title: 'Новачки',
+                desc: 'Мандрівники на маркованих стежках.',
+                tag: 'Початківець',
+                risks: [
+                    'Блукання на маркованих стежках (навігація).',
+                    'Недооцінка погоди/темряви (гіпотермія).',
+                    'Невідповідне взуття (вивихи).'
+                ],
+                mitigation: [
+                    '<strong class="text-stone-300">Чолівка (Ліхтар):</strong> Обов\'язково. Телефон швидко сідає на холоді.',
+                    '<strong class="text-stone-300">Вода:</strong> Плануйте 1л на годину або майте засоби очищення.',
+                    '<strong class="text-stone-300">Маршрутний лист:</strong> Повідомте надійній людині свій маршрут і час повернення.'
+                ],
+                philosophy: 'Подорож у тисячу миль починається з одного кроку. Поважай невідоме.',
+                stat: 'Ходьба: ~1 мікроморт/43км. Гори додають погодні ризики, але лишаються безпечними при підготовці.'
+            },
+            {
+                id: 'weekend-easy',
+                title: 'Мандрівники вихідного дня',
+                desc: 'Регулярні виходи на популярні маршрути.',
+                tag: 'Рекреація',
+                risks: [
+                    'Самовпевненість на знайомих стежках.',
+                    'Зневоднення / Тепловий удар.',
+                    'Дикі тварини (ведмеді, пуми).'
+                ],
+                mitigation: [
+                    '<strong class="text-stone-300">Взуття:</strong> Трекінгові кросівки або черевики з чіпкою підошвою.',
+                    '<strong class="text-stone-300">Аптечка:</strong> Пластирі від мозолів, бинт, антигістамінні.',
+                    '<strong class="text-stone-300">Спрей від ведмедів:</strong> Носіть на поясі, а не всередині наплічника.'
+                ],
+                philosophy: 'Природа — це храм, а не спортзал. Заходь із шаною.',
+                stat: 'Ризик смерті: 0.001-0.005% на 1000 км. Більшість випадків — травми ніг.'
+            },
+            {
+                id: 'strong-hiker',
+                title: 'Витривалі мандрівники',
+                desc: 'Довгі дистанції, значна висота.',
+                tag: 'Ентузіаст',
+                risks: [
+                    'Виснаження і "Вершинна лихоманка".',
+                    'Раптові шторми вище лінії лісу.',
+                    'Пастки рельєфу (осипи, урвища).'
+                ],
+                mitigation: [
+                    '<strong class="text-stone-300">Навігація:</strong> GaiaGPS/AllTrails (офлайн) + Паперова мапа.',
+                    '<strong class="text-stone-300">Час повернення:</strong> Встановіть жорсткий час (наприклад, 14:00) для розвороту назад.',
+                    '<strong class="text-stone-300">Одяг:</strong> Штормівка та теплий шар завжди в наплічнику.'
+                ],
+                philosophy: 'Витривалість дозволяє побачити більше, але мудрість дозволяє повернутися.',
+                stat: 'Ризик серйозних травм зростає до ~0.5% на 1000 км через втому та складний рельєф.'
+            },
+            {
+                id: 'scrambler',
+                title: 'Скелелази-аматори (Скрамблери)',
+                desc: 'Поза стежками, використання рук.',
+                tag: 'Перехід до технічного',
+                risks: [
+                    'Застрягання на скелях ("Cliffed out").',
+                    'Каменепади (природні або від інших).',
+                    'Зрив, що переростає у фатальне падіння.'
+                ],
+                mitigation: [
+                    '<strong class="text-stone-300">Шолом (Каска):</strong> Обов\'язково для кулуарів та гребенів.',
+                    '<strong class="text-stone-300">Орієнтування:</strong> Відрізняйте піші маршрути від 4-ї категорії. 4-та категорія може вимагати страховки.',
+                    '<strong class="text-stone-300">Золоте правило:</strong> Не лізь туди, звідки не можеш впевнено злізти.'
+                ],
+                philosophy: 'Межа між ходьбою та лазінням — місце, де розум має загостритись.',
+                stat: 'Аварії часто стаються через помилку в навігації, що заводить на складні скелі.'
+            },
+            {
+                id: 'backpacker',
+                title: 'Багатоденні мандрівники',
+                desc: 'Автономність з ночівлею.',
+                tag: 'Витривалість',
+                risks: [
+                    'Хронічні травми від перенавантаження.',
+                    'Переправи через ріки (утоплення).',
+                    'Ізоляція (затримка рятувальників).'
+                ],
+                mitigation: [
+                    '<strong class="text-stone-300">Зв\'язок:</strong> Супутниковий пристрій (InReach/Spot).',
+                    '<strong class="text-stone-300">Річки:</strong> Розстібніть пояс наплічника, переходьте групами.',
+                    '<strong class="text-stone-300">Їжа:</strong> Герметичні контейнери або підвішування від ведмедів.'
+                ],
+                philosophy: 'Самозарадність — це найвища свобода. Ти несеш свій дім і безпеку на плечах.',
+                stat: 'Дані WCT: 1-2% потребують евакуації. Слизькі конструкції — причина №1.'
+            },
+            {
+                id: 'rock-climber',
+                title: 'Скелелази вихідного дня',
+                desc: 'Технічне лазіння з мотузкою.',
+                tag: 'Технічний',
+                risks: [
+                    'Помилки страховки / Непорозуміння.',
+                    'Помилки при дюльфері (катастрофічні).',
+                    'Об\'єктивні загрози (каменепад).'
+                ],
+                mitigation: [
+                    '<strong class="text-stone-300">Взаємоперевірка:</strong> Торкніться вузлів партнера перед кожним підйомом.',
+                    '<strong class="text-stone-300">Дюльфер:</strong> Вузли на кінцях мотузки. Прусик для страховки.',
+                    '<strong class="text-stone-300">Команди:</strong> Чітко домовтеся про сигнали ("Вибери", "На страховці").'
+                ],
+                philosophy: 'Довіра — це валюта мотузки. Заробляй її і витрачай мудро.',
+                stat: '90% нещасних випадків — це людська помилка, а не відмова спорядження.'
+            },
+            {
+                id: 'alpinist',
+                title: 'Альпіністи (Лід / Мікст)',
+                desc: 'Складний рельєф, льодовики.',
+                tag: 'Просунутий',
+                risks: [
+                    'Лавини.',
+                    'Падіння в тріщини.',
+                    'Екстремальна погода / Обмороження.',
+                    'Складні рішення під тиском.'
+                ],
+                mitigation: [
+                    '<strong class="text-stone-300">Освіта:</strong> Курс лавинної безпеки (AST 1).',
+                    '<strong class="text-stone-300">Льодовики:</strong> Мотузка, система, прусики, поліспасти. Тренуйте витягування.',
+                    '<strong class="text-stone-300">Смиренність:</strong> Вмійте відступити. Гора стоятиме і завтра.'
+                ],
+                philosophy: 'Медитація в русі. Умови гори диктують правила.',
+                stat: '~7 смертей від лавин на рік у Британській Колумбії. Підготовка — єдиний захист.'
+            },
+            {
+                id: 'expedition',
+                title: 'Експедиційні альпіністи',
+                desc: 'Віддалені райони, велика висота.',
+                tag: 'Еліта',
+                risks: [
+                    'Гірська хвороба (набряк мозку/легенів).',
+                    'Льодові обвали (сераки).',
+                    'Виснаження та замерзання.'
+                ],
+                mitigation: [
+                    '<strong class="text-stone-300">Акліматизація:</strong> графік "Лізь високо, спи низько".',
+                    '<strong class="text-stone-300">Логістика:</strong> Запасні пальники, паливо та укриття.',
+                    '<strong class="text-stone-300">Кисень:</strong> Розуміння сатурації та тригерів для спуску.'
+                ],
+                philosophy: 'Щоб знайти сенс, ми випробовуємо межі. Щоб жити гідно, ми мусимо повернутися.',
+                stat: 'Зміна клімату дестабілізує маршрути (більше каменепадів, танення мерзлоти).'
+            }
+        ];
+
+        // --- UI LOGIC: Persona Explorer ---
+        const personaListEl = document.getElementById('persona-list');
+        const displayTitle = document.getElementById('p-title');
+        const displayDesc = document.getElementById('p-desc');
+        const displayTag = document.getElementById('p-tag');
+        const displayRisks = document.getElementById('p-risks');
+        const displayMitigation = document.getElementById('p-mitigation');
+        const displayPhilosophy = document.getElementById('p-philosophy');
+        const displayStat = document.getElementById('p-stat');
+
+        let activePersonaId = 'first-timer';
+
+        function renderPersonaButtons() {
+            personaListEl.innerHTML = '';
+            personas.forEach(p => {
+                const btn = document.createElement('button');
+                const isActive = p.id === activePersonaId;
+                
+                let baseClasses = "persona-card w-full text-left px-5 py-4 rounded-lg border flex items-center justify-between group ";
+                let activeClasses = isActive 
+                    ? "persona-active bg-stone-800 border-amber-500 shadow-lg" 
+                    : "bg-stone-900 border-stone-800 hover:bg-stone-800";
+
+                btn.className = baseClasses + activeClasses;
+                btn.onclick = () => loadPersona(p.id);
+                
+                btn.innerHTML = `
+                    <div>
+                        <span class="font-medium block ${isActive ? 'text-amber-500' : 'text-stone-300 group-hover:text-stone-200'}">${p.title}</span>
+                        <span class="text-xs text-stone-500 hidden sm:inline-block truncate max-w-[200px]">${p.desc}</span>
+                    </div>
+                    ${isActive ? '<span class="text-amber-500">→</span>' : ''}
+                `;
+                personaListEl.appendChild(btn);
+            });
+        }
+
+        function loadPersona(id) {
+            activePersonaId = id;
+            const p = personas.find(item => item.id === id);
+            
+            // Render buttons to update active state styling
+            renderPersonaButtons();
+
+            // Animate content
+            const display = document.getElementById('persona-display');
+            display.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                displayTitle.textContent = p.title;
+                displayDesc.textContent = p.desc;
+                displayTag.textContent = p.tag;
+                
+                displayRisks.innerHTML = p.risks.map(r => `<li>${r}</li>`).join('');
+                displayMitigation.innerHTML = p.mitigation.map(m => `<li>${m}</li>`).join('');
+                displayPhilosophy.textContent = `"${p.philosophy}"`;
+                displayStat.textContent = p.stat;
+                
+                display.style.opacity = '1';
+            }, 150);
+        }
+
+        // Initialize Persona View
+        renderPersonaButtons();
+        loadPersona('first-timer');
+
+
+        // --- CHART LOGIC ---
+        Chart.defaults.color = '#A8A29E';
+        Chart.defaults.borderColor = '#44403c';
+        Chart.register(ChartDataLabels);
+
+        // Chart 1: Risk Levels (Bar Chart)
+        const ctxRisk = document.getElementById('riskChart').getContext('2d');
+        const riskData = {
+            labels: ['Звичайне життя', 'Піший туризм', 'Скрамблінг', 'Технічний альпінізм'],
+            fatality: [0.001, 0.005, 0.05, 0.5], 
+            injury: [0.1, 0.5, 5, 15] 
+        };
+
+        const riskChart = new Chart(ctxRisk, {
+            type: 'bar',
+            data: {
+                labels: riskData.labels,
+                datasets: [{
+                    label: 'Індекс ризику смертності',
+                    data: riskData.fatality,
+                    backgroundColor: ['#57534E', '#78716c', '#F59E0B', '#dc2626'],
+                    borderRadius: 4,
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    datalabels: { display: false }, 
+                    tooltip: {
+                        backgroundColor: '#1C1917',
+                        titleColor: '#F59E0B',
+                        bodyColor: '#E7E5E4',
+                        borderColor: '#44403c',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) { return context.raw + ' (Умовний індекс)'; }
+                        }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#292524' },
+                        title: { display: true, text: 'Відносна величина ризику' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        function updateRiskChart(type) {
+            // Update UI buttons
+            document.getElementById('btn-fatality').className = type === 'fatality' 
+                ? "px-4 py-1.5 rounded-md text-sm font-medium transition-all bg-amber-600 text-white shadow" 
+                : "px-4 py-1.5 rounded-md text-sm font-medium transition-all text-stone-400 hover:text-stone-200";
+            
+            document.getElementById('btn-injury').className = type === 'injury'
+                ? "px-4 py-1.5 rounded-md text-sm font-medium transition-all bg-amber-600 text-white shadow"
+                : "px-4 py-1.5 rounded-md text-sm font-medium transition-all text-stone-400 hover:text-stone-200";
+
+            // Update Chart
+            if (type === 'fatality') {
+                riskChart.data.datasets[0].label = 'Оцінка ризику смертності';
+                riskChart.data.datasets[0].data = riskData.fatality;
+                riskChart.data.datasets[0].backgroundColor = ['#57534E', '#78716c', '#F59E0B', '#dc2626'];
+            } else {
+                riskChart.data.datasets[0].label = 'Оцінка ризику травматизму';
+                riskChart.data.datasets[0].data = riskData.injury;
+                riskChart.data.datasets[0].backgroundColor = ['#57534E', '#a8a29e', '#fcd34d', '#991b1b'];
+            }
+            riskChart.update();
+        }
+
+        // Chart 2: Demographics (Donut)
+        const ctxDemo = document.getElementById('demographicChart').getContext('2d');
+        const demographicChart = new Chart(ctxDemo, {
+            type: 'doughnut',
+            data: {
+                labels: ['Чоловіки', 'Жінки'],
+                datasets: [{
+                    data: [134, 40],
+                    backgroundColor: ['#44403c', '#d6d3d1'], 
+                    borderColor: '#1C1917',
+                    borderWidth: 2,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: 20 },
+                plugins: {
+                    datalabels: {
+                        color: ['#E7E5E4', '#FF6B00'], 
+                        font: { weight: 'bold', size: 14 },
+                        formatter: (value, ctx) => {
+                            let sum = 0;
+                            let dataArr = ctx.chart.data.datasets[0].data;
+                            dataArr.map(data => { sum += data; });
+                            let percentage = (value*100 / sum).toFixed(1)+"%";
+                            return ctx.chart.data.labels[ctx.dataIndex] + '\n' + value + ' (' + percentage + ')';
+                        },
+                        anchor: 'center',
+                        align: 'center',
+                        offset: 0
+                    },
+                    legend: { 
+                        position: 'bottom',
+                        labels: { color: '#A8A29E', padding: 20 }
+                    },
+                    tooltip: {
+                        enabled: false 
+                    }
+                }
+            }
+        });
+
+
+        // --- INTERACTION: Cycle of Experience ---
+        const cycleData = [
+            {
+                title: '1. Підготовка та Вишкіл',
+                text: 'Безпека починається вдома. Це <strong>фізична підготовка</strong>, перевірка <strong>погоди саме на висоті</strong> (не в місті) та пакування <strong>"10 Речей Першої Необхідності"</strong>. Це читання звітів про стан маршруту за <em>поточний</em> сезон, а не лише старих путівників.',
+                color: 'bg-amber-600'
+            },
+            {
+                title: '2. Свідома Дія (Сходження)',
+                text: 'Безпосередньо на маршруті. Цей етап вимагає <strong>ситуаційної обізнаності</strong>. Недостатньо просто слідувати плану; ви повинні постійно переоцінювати його з огляду на зміни умов (погода, втома, рельєф). Мета — стан "потоку" в межах безпеки.',
+                color: 'bg-stone-600'
+            },
+            {
+                title: '3. Рефлексія та Звіт',
+                text: 'Подорож не закінчується біля машини. Був небезпечний момент? <strong>Зробіть звіт.</strong> Прийняли мудре рішення повернутися? <strong>Відсвяткуйте це.</strong> Неосмислений досвід — це просто спогад; осмислений досвід стає мудрістю.',
+                color: 'bg-stone-600'
+            },
+            {
+                title: '4. Наставництво',
+                text: 'Фінальна стадія Повноти Життя. Передача знань наступному поколінню забезпечує ріст культури безпеки. Це перетворює вас зі "споживача" гір на "хранителя" спільноти.',
+                color: 'bg-stone-600'
+            }
+        ];
+
+        let activeCycleIndex = 0;
+
+        function updateCycle(index) {
+            activeCycleIndex = index;
+            const data = cycleData[index];
+
+            // Update Dots
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`cycle-dot-${i}`);
+                if (i === index) {
+                    dot.className = "w-14 h-14 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-xl border-4 border-stone-800 shadow-xl ring-4 ring-amber-600/30 transition-all scale-110";
+                } else {
+                    dot.className = "w-12 h-12 rounded-full bg-stone-700 text-stone-500 flex items-center justify-center font-bold text-lg border-4 border-stone-800 shadow-none transition-all hover:bg-stone-600 cursor-pointer";
+                }
+            }
+
+            // Update Content Box
+            const contentBox = document.getElementById('cycle-content-box');
+            // Flash effect
+            contentBox.classList.add('opacity-50', 'scale-[0.99]');
+            
+            setTimeout(() => {
+                document.getElementById('cycle-title').textContent = data.title;
+                document.getElementById('cycle-text').innerHTML = data.text;
+                contentBox.classList.remove('opacity-50', 'scale-[0.99]');
+            }, 150);
+        }
+
+        // Initialize Cycle
+        updateCycle(0);
+
+    </script>
+</body>
+</html>
