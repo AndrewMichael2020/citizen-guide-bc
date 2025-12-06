@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>The Architecture of Innocence - Citizen's Guide to BC Law</title>
     
     <!-- Tailwind CSS -->
@@ -56,6 +59,33 @@
         .resource-link:hover {
             background-color: #EDF2F7;
         }
+        
+        /* Mobile touch target improvements */
+        @media (max-width: 768px) {
+            .card-hover {
+                /* Disable transform on mobile to prevent layout shifts */
+                transform: none !important;
+            }
+            
+            /* Ensure buttons have adequate touch targets (min 44px height) */
+            a.inline-block {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        
+        /* Improve text wrapping on very small screens */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 2rem !important;
+            }
+            
+            h2 {
+                font-size: 1.5rem !important;
+            }
+        }
     </style>
 </head>
 <body class="font-sans text-legal-dark">
@@ -69,13 +99,13 @@
     </header>
 
     <!-- Vital Disclaimer Banner -->
-    <div class="bg-legal-warn text-white py-4 shadow-md">
+    <div class="bg-legal-warn text-white py-3 md:py-4 shadow-md">
         <div class="max-w-6xl mx-auto px-4">
-            <div class="flex items-center justify-center">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-start md:items-center justify-center text-center md:text-left">
+                <svg class="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3 flex-shrink-0 mt-0.5 md:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                 </svg>
-                <p class="text-sm md:text-base font-semibold">
+                <p class="text-xs md:text-base font-semibold leading-snug">
                     <strong>NOT LEGAL ADVICE:</strong> This is a citizen research project for educational purposes. Always consult a lawyer for legal matters.
                 </p>
             </div>
@@ -138,7 +168,7 @@
                         </li>
                     </ul>
                     <a href="The_Architecture_of_Innocence_Citizen_Guide_BC.html" 
-                       class="inline-block bg-legal-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors">
+                       class="inline-block bg-legal-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors w-full md:w-auto text-center">
                         View Interactive Guide →
                     </a>
                 </div>
@@ -176,7 +206,7 @@
                         </li>
                     </ul>
                     <a href="The_Architecture_of_Innocence_Citizen_Guide_BC_UA.html" 
-                       class="inline-block bg-legal-warn text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors">
+                       class="inline-block bg-legal-warn text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors w-full md:w-auto text-center">
                         Переглянути посібник →
                     </a>
                 </div>
