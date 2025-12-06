@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Architecture of Innocence: Повний посібник громадянина з правової навігації в Британській Колумбії</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Legal Parchment -->
+    <!-- 
+        Background: #FDFBF7 (Warm, paper-like)
+        Text: #1A202C (Dark Slate)
+        Primary: #2C5282 (Trust Blue)
+        Accent: #C05621 (Caution Orange)
+        Secondary: #718096 (Cool Gray)
+    -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#FDFBF7',
+                        legal: {
+                            blue: '#2C5282',
+                            dark: '#1A202C',
+                            warn: '#C05621',
+                            subtle: '#718096',
+                            highlight: '#EDF2F7'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Merriweather', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 500px;
+        }
+
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        body {
+            background-color: #FDFBF7;
+            color: #1A202C;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .card-shadow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-active {
+            border-bottom: 2px solid #2C5282;
+            color: #2C5282;
+            font-weight: 600;
+        }
+
+        .tab-inactive {
+            color: #718096;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab-inactive:hover {
+            color: #4A5568;
+        }
+    </style>
+
+    <!-- Application Structure Plan: 
+         Ukrainian Translation Version.
+         1. Header & Disclaimer: Translated to Ukrainian, keeping legal terms clear.
+         2. Interactive Dashboard: "Landscape of Risk" translated.
+         3. Thematic Navigation: Categories translated.
+         4. Content Cards: Content translated but preserving English legal terms (e.g., Mischief, Charter).
+         5. Simulator: Dialogue translated.
+         6. References: Sources kept in original English/French as they refer to specific docs.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-serif font-bold text-legal-blue">The Architecture of Innocence</h1>
+                    <p class="text-xs md:text-sm text-legal-subtle">Повний посібник громадянина з правової навігації в Британській Колумбії</p>
+                </div>
+                <button onclick="scrollToSection('disclaimer')" class="text-xs bg-legal-warn text-white px-3 py-1 rounded hover:bg-orange-700 transition text-center">
+                    Важливе застереження
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- Intro Section -->
+        <section class="mb-12 max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-serif font-bold text-gray-900 mb-4">Побудова фортеці законності</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                Сучасна правова система — це складний механізм. Для "наївного" чесного громадянина — можливо, нового іммігранта або просто людини, яка ніколи не мала справ із законом — невинуватість не завжди є захистом. Добрі наміри можуть призвести до катастрофічних юридичних наслідків. Цей посібник є філософським роздумом і практичним чек-листом про те, як уникнути "дурних" помилок, які тягнуть за собою тяжкі покарання в Канаді та British Columbia.
+            </p>
+            <div id="disclaimer" class="bg-orange-50 border-l-4 border-legal-warn p-4 text-left rounded shadow-sm">
+                <p class="font-bold text-legal-warn text-sm uppercase tracking-wide mb-1">Життєво важливе застереження</p>
+                <p class="text-sm text-gray-800">
+                    <strong>Це не є юридичною консультацією (Legal Advice).</strong> Цей посібник є проектом громадянського дослідження — діалогом із самим собою про правомірну поведінку. Він написаний непрофесіоналом для освітніх та філософських цілей. Закони змінюються, і кожна ситуація унікальна. Якщо вас затримали, заарештували або ви маєте юридичні проблеми, <strong>негайно зверніться до адвоката</strong>. Не покладайтеся на цей сайт для свого захисту.
+                </p>
+            </div>
+        </section>
+
+        <!-- Visualization Section: The Landscape of Risk -->
+        <section class="mb-16">
+            <div class="mb-6">
+                <h3 class="text-2xl font-serif font-bold text-gray-900">Пейзаж ризиків (The Landscape of Risk)</h3>
+                <p class="text-gray-600 mt-2 max-w-3xl">
+                    Ми часто недооцінюємо "дрібні" порушення. Цей аналіз показує 12 поширених пасток залежно від того, як легко в них потрапити, та наскільки серйозними є наслідки. Наведіть курсор на бульбашку, щоб побачити контекст.
+                </p>
+            </div>
+            
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+                <div class="mt-4 text-center text-sm text-gray-500 italic">
+                    Вісь X: Ймовірність "чесної" помилки &nbsp;|&nbsp; Вісь Y: Серйозність правових наслідків
+                </div>
+            </div>
+        </section>
+
+        <!-- The 12 Pillars of Caution (Tabs & Cards) -->
+        <section class="mb-16">
+            <div class="mb-8">
+                <h3 class="text-2xl font-serif font-bold text-gray-900">12 Стовпів обережності</h3>
+                <p class="text-gray-600 mt-2">
+                    Дослідіть поширені пастки. Виберіть категорію для фільтрації порад.
+                </p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex flex-wrap border-b border-gray-200 mb-8 overflow-x-auto">
+                <button onclick="filterCards('all')" id="tab-all" class="tab-active px-6 py-3 text-sm font-medium focus:outline-none transition-colors whitespace-nowrap">
+                    Всі ризики
+                </button>
+                <button onclick="filterCards('police')" id="tab-police" class="tab-inactive px-6 py-3 text-sm font-medium focus:outline-none transition-colors whitespace-nowrap">
+                    Поліція (Police Encounters)
+                </button>
+                <button onclick="filterCards('mobility')" id="tab-mobility" class="tab-inactive px-6 py-3 text-sm font-medium focus:outline-none transition-colors whitespace-nowrap">
+                    Водіння та Подорожі
+                </button>
+                <button onclick="filterCards('conduct')" id="tab-conduct" class="tab-inactive px-6 py-3 text-sm font-medium focus:outline-none transition-colors whitespace-nowrap">
+                    Соціум та Діджитал
+                </button>
+                <button onclick="filterCards('safety')" id="tab-safety" class="tab-inactive px-6 py-3 text-sm font-medium focus:outline-none transition-colors whitespace-nowrap">
+                    Самооборона (Self-Defence)
+                </button>
+            </div>
+
+            <!-- Grid -->
+            <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards will be injected by JS -->
+            </div>
+        </section>
+
+        <!-- Interactive Simulator: The Right to Silence -->
+        <section class="mb-16 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="p-8 md:p-12">
+                <div class="md:flex md:items-start md:gap-8">
+                    <div class="md:w-1/3 mb-6 md:mb-0">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-4">Симуляція: "Дружня" розмова</h3>
+                        <p class="text-gray-600 mb-4 text-sm">
+                            Найпоширеніша помилка — говорити занадто багато. Поліції дозволено брехати та вдавати ваших друзів, щоб отримати інформацію.
+                        </p>
+                        <div class="bg-blue-50 p-4 rounded text-xs text-legal-blue">
+                            <strong>Принцип:</strong> Ви маєте право зберігати мовчання та звернутися до адвоката (Charter s.10(b)). Використовуйте його.
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-2/3 bg-gray-50 rounded-lg p-6 border border-gray-200 relative">
+                        <!-- Simulation Container -->
+                        <div id="sim-content" class="min-h-[200px] flex flex-col justify-between">
+                            <div id="sim-question" class="font-bold text-lg text-gray-800 mb-6">
+                                Officer: "Привіт. Ти виглядаєш знервованим. Просто розкажи мені, що сталося, щоб ми могли це владнати і ти пішов додому. Чому ти сварився з тим хлопцем?"
+                            </div>
+                            
+                            <div id="sim-options" class="grid gap-3">
+                                <button onclick="runSim(1)" class="w-full text-left px-4 py-3 bg-white border border-gray-300 rounded hover:bg-gray-100 transition shadow-sm text-sm">
+                                    A. "Я не сварився! Він почав перший, я просто відштовхнув його, бо злякався."
+                                </button>
+                                <button onclick="runSim(2)" class="w-full text-left px-4 py-3 bg-white border border-gray-300 rounded hover:bg-gray-100 transition shadow-sm text-sm">
+                                    B. "Слухайте, мені нічого приховувати, перевірте мою сумку, я просто студент."
+                                </button>
+                                <button onclick="runSim(3)" class="w-full text-left px-4 py-3 bg-white border border-gray-300 rounded hover:bg-gray-100 transition shadow-sm text-sm font-semibold text-legal-blue">
+                                    C. "I would like to remain silent. I would like to speak to a lawyer." (Я хочу зберігати мовчання. Я хочу поговорити з адвокатом.)
+                                </button>
+                            </div>
+                            
+                            <div id="sim-result" class="hidden mt-4 p-4 rounded bg-white border border-gray-200">
+                                <!-- Result text goes here -->
+                            </div>
+                            
+                            <button id="sim-reset" onclick="resetSim()" class="hidden mt-4 self-start text-xs text-gray-500 underline">Скинути симуляцію</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- References Section -->
+        <section class="border-t border-gray-200 pt-10 pb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Джерела та література (References)</h3>
+            <p class="text-sm text-gray-600 mb-4">Це дослідження синтезує публічну правову інформацію. Для офіційних текстів звертайтеся до:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-legal-blue">
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Criminal Code of Canada (R.S.C., 1985, c. C-46)</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Canadian Charter of Rights and Freedoms</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Legal Aid BC - Interaction Guides</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; BC Intimate Images Protection Act</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Canada Border Services Agency (CBSA) Guidelines</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Motor Vehicle Act (British Columbia)</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400 text-sm mb-2">The Architecture of Innocence &copy; 2025</p>
+            <p class="text-gray-600 text-xs max-w-2xl mx-auto">
+                Disclaimer: Цей веб-додаток є концептуальним проектом для освітніх цілей. Він намагається систематизувати публічну правову інформацію для "наївного" громадянина, але не є юридичною консультацією. Автор не є юристом.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Data Store (Translated) ---
+        // Categories: police, mobility, conduct, safety
+        // Titles and Mistake descriptions translated, Legal Terms kept in English where critical.
+        const cardData = [
+            {
+                id: 1,
+                title: "Talking Freely (Розмови з поліцією)",
+                category: "police",
+                icon: "🤐",
+                summary: "Відмова від права на мовчання та адвоката.",
+                mistake: "Добровільні детальні пояснення, спроби 'прояснити' факти або невимушене інтерв'ю до розмови з юристом.",
+                law: "Charter s.10(b): Право найняти та проінструктувати адвоката без зволікань.",
+                smart: "Ввічливо скажіть: 'I choose to remain silent. I want to speak to a lawyer.' Потім мовчіть.",
+                riskLevel: 0.9, 
+                severity: 0.95
+            },
+            {
+                id: 2,
+                title: "Consent to Search (Згода на обшук)",
+                category: "police",
+                icon: "🎒",
+                summary: "Згода на обшук, тому що вам 'нічого приховувати'.",
+                mistake: "Недбале 'sure, go ahead' (звісно, давайте), коли закон цього не вимагав. Це скасовує ваш захист за Charter s.8.",
+                law: "Charter s.8: Захист від необґрунтованого обшуку та вилучення (unreasonable search and seizure).",
+                smart: "Запитайте: 'Am I required to let you search?' (Чи зобов'язаний я дозволити обшук?) Якщо ні — ввічливо відмовте.",
+                riskLevel: 0.7,
+                severity: 0.8
+            },
+            {
+                id: 3,
+                title: "Weapons for Defence (Зброя для захисту)",
+                category: "safety",
+                icon: "🔪",
+                summary: "Носіння інструментів з наміром самооборони.",
+                mistake: "Зізнання поліції, що ви носите ніж або балончик 'for self-defence'. Це доводить намір використання для 'dangerous purpose'.",
+                law: "Criminal Code s.88: Володіння зброєю для небезпечних цілей.",
+                smart: "Не носіть зброю для захисту. Інструменти (ножі) — для роботи. Перцевий балончик (Pepper spray) заборонений проти людей.",
+                riskLevel: 0.8,
+                severity: 0.85
+            },
+            {
+                id: 4,
+                title: "Misunderstanding Self-Defence",
+                category: "safety",
+                icon: "🛑",
+                summary: "Помста або ескалація під виглядом захисту.",
+                mistake: "Переслідування злодія, бажання 'провчити' (teaching a lesson) або використання зброї в кулачному бою.",
+                law: "Criminal Code s.34: Сила повинна бути розумною (reasonable) за даних обставин.",
+                smart: "Відступіть, коли це безпечно. Сила має бути пропорційною та захисною, ніколи не мстивою.",
+                riskLevel: 0.6,
+                severity: 0.9
+            },
+            {
+                id: 5,
+                title: "Obstruction (Перешкоджання)",
+                category: "police",
+                icon: "✋",
+                summary: "Фізичне або словесне втручання в роботу поліції.",
+                mistake: "Виривання під час арешту, брехня про своє ім'я або фізичне блокування офіцерів.",
+                law: "Criminal Code s.129: Опір або умисне перешкоджання офіцеру (Resist or wilfully obstruct peace officer).",
+                smart: "Не чиніть фізичного опору навіть незаконному арешту. Боріться в суді, а не на вулиці.",
+                riskLevel: 0.65,
+                severity: 0.75
+            },
+            {
+                id: 6,
+                title: "Impaired Driving (Нетверезе водіння)",
+                category: "mobility",
+                icon: "🍷",
+                summary: "Водіння 'напідпитку' або відмова від тесту.",
+                mistake: "Думка, що ви 'в нормі'. Відмова від алкотестера (це кримінальний злочин).",
+                law: "Criminal Code + BC MVA: IRPs (негайні заборони) починаються з рівня 'Warn' (0.05 проміле).",
+                smart: "Нульова толерантність до себе. Відмова від тесту (Refusal) тягне таке ж покарання, як і вирок.",
+                riskLevel: 0.5,
+                severity: 0.95
+            },
+            {
+                id: 7,
+                title: "Driving While Prohibited (Заборона водіння)",
+                category: "mobility",
+                icon: "🚫",
+                summary: "Ігнорування адміністративних заборон.",
+                mistake: "Водіння 'тільки на роботу' під час відсторонення. Це може призвести до в'язниці при повторних порушеннях.",
+                law: "BC Motor Vehicle Act: штрафи $500-$2000, 12 місяців заборони, можлива в'язниця.",
+                smart: "Поважайте документи. Система автоматично сканує номерні знаки.",
+                riskLevel: 0.4,
+                severity: 0.8
+            },
+            {
+                id: 8,
+                title: "Breaching Conditions (Порушення умов)",
+                category: "conduct",
+                icon: "📜",
+                summary: "Ігнорування умов звільнення або пробації.",
+                mistake: "Контакт з колишнім партнером або порушення комендантської години, бо ви 'помирилися'.",
+                law: "Administration of Justice Offences: Порушення умов — це окремі кримінальні звинувачення.",
+                smart: "Тільки суддя може змінити умови. Особиста домовленість з іншою стороною юридично нікчемна.",
+                riskLevel: 0.6,
+                severity: 0.7
+            },
+            {
+                id: 9,
+                title: "Intimate Images (Інтимні зображення)",
+                category: "conduct",
+                icon: "📱",
+                summary: "Поширення ню (nudes) без чіткої згоди.",
+                mistake: "Помста (revenge porn) або пересилання 'жартівливих' фото. У BC діють також цивільні позови.",
+                law: "Criminal Code s.162.1 + BC Intimate Images Protection Act.",
+                smart: "Ніколи не діліться інтимним контентом без чіткої, поточної згоди.",
+                riskLevel: 0.5,
+                severity: 0.85
+            },
+            {
+                id: 10,
+                title: "Uttering Threats (Погрози)",
+                category: "conduct",
+                icon: "🤬",
+                summary: "Погрози людям, майну або тваринам.",
+                mistake: "СМС типу 'Я розіб'ю твою машину' або 'Я вб'ю твого пса' в гніві.",
+                law: "Criminal Code s.264.1: Погрози заподіяти смерть, шкоду або пошкодити майно.",
+                smart: "Випускайте пар приватно. Письмові погрози — це вічний доказ наміру.",
+                riskLevel: 0.7,
+                severity: 0.6
+            },
+            {
+                id: 11,
+                title: "Cannabis at Border (Канабіс на кордоні)",
+                category: "mobility",
+                icon: "🛂",
+                summary: "Перетин кордону з легальною травою/CBD.",
+                mistake: "Ввезення 'легального' джойнта в США або назад у Канаду.",
+                law: "Customs Act: Незаконно перевозити канабіс через кордон у будь-якому напрямку.",
+                smart: "Викиньте всі продукти з канабісу з багажу/авто перед будь-яким кордоном.",
+                riskLevel: 0.3, 
+                severity: 0.95 // Lifetime ban
+            },
+            {
+                id: 12,
+                title: "Minor Theft & Mischief (Дрібні крадіжки)",
+                category: "conduct",
+                icon: "🛒",
+                summary: "Крадіжки в магазинах або пошкодження майна.",
+                mistake: "'Перевірка' охорони, або розбиття телефону/стіни під час сварки (кваліфікується як Mischief).",
+                law: "Criminal Code s.334 (Theft) & s.430 (Mischief).",
+                smart: "Поважайте чужу власність. Пошкодження домашнього майна часто кваліфікується як Mischief.",
+                riskLevel: 0.8,
+                severity: 0.5
+            }
+        ];
+
+        // --- Chart Initialization ---
+        document.addEventListener('DOMContentLoaded', function() {
+            renderChart();
+            renderCards('all');
+        });
+
+        function renderChart() {
+            const ctx = document.getElementById('riskChart').getContext('2d');
+            
+            // Map data for scatter plot
+            const dataPoints = cardData.map(item => ({
+                x: item.riskLevel, // Likelihood
+                y: item.severity,  // Severity
+                r: 10,             // Radius
+                label: item.title, // Now translated
+                category: item.category
+            }));
+
+            // Colors based on category
+            const colorMap = {
+                police: '#C53030', // Red
+                mobility: '#DD6B20', // Orange
+                conduct: '#2B6CB0', // Blue
+                safety: '#805AD5'  // Purple
+            };
+
+            new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Risk Landscape',
+                        data: dataPoints,
+                        backgroundColor: (context) => {
+                            const cat = context.raw?.category;
+                            return colorMap[cat] || '#718096';
+                        },
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Ймовірність помилки (Частота)' },
+                            min: 0.2,
+                            max: 1.0,
+                            grid: { display: false }
+                        },
+                        y: {
+                            title: { display: true, text: 'Серйозність правових наслідків' },
+                            min: 0.4,
+                            max: 1.0,
+                            grid: { color: '#EDF2F7' } // Subtle grid
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.label;
+                                }
+                            },
+                            backgroundColor: '#1A202C',
+                            titleFont: { family: 'Merriweather' },
+                            bodyFont: { family: 'Inter' }
+                        },
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // --- Card Rendering Logic ---
+        function filterCards(category) {
+            // Update Tab Styles
+            const tabs = ['all', 'police', 'mobility', 'conduct', 'safety'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === category) {
+                    btn.classList.remove('tab-inactive');
+                    btn.classList.add('tab-active');
+                } else {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                }
+            });
+
+            renderCards(category);
+        }
+
+        function renderCards(category) {
+            const grid = document.getElementById('cards-grid');
+            grid.innerHTML = '';
+
+            const filtered = category === 'all' 
+                ? cardData 
+                : cardData.filter(d => d.category === category);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-lg p-6 border border-gray-100 card-shadow flex flex-col justify-between h-full";
+                
+                // Color strip based on category
+                let stripColor = "bg-gray-400";
+                if(item.category === 'police') stripColor = "bg-red-600";
+                if(item.category === 'mobility') stripColor = "bg-orange-500";
+                if(item.category === 'conduct') stripColor = "bg-blue-600";
+                if(item.category === 'safety') stripColor = "bg-purple-600";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-3xl">${item.icon}</div>
+                            <div class="h-1 w-12 ${stripColor} rounded-full"></div>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2 font-serif leading-tight">${item.title}</h4>
+                        <p class="text-sm text-gray-600 mb-4">${item.summary}</p>
+                        
+                        <div class="hidden" id="details-${item.id}">
+                            <div class="mb-3">
+                                <span class="text-xs font-bold text-red-600 uppercase tracking-wide">Помилка (Mistake)</span>
+                                <p class="text-sm text-gray-800 bg-red-50 p-2 rounded mt-1">${item.mistake}</p>
+                            </div>
+                            <div class="mb-3">
+                                <span class="text-xs font-bold text-legal-blue uppercase tracking-wide">Закон (The Law)</span>
+                                <p class="text-xs text-gray-500 mt-1 italic">${item.law}</p>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-green-700 uppercase tracking-wide">Розумний вибір</span>
+                                <p class="text-sm text-gray-800 bg-green-50 p-2 rounded mt-1 border-l-2 border-green-500">${item.smart}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="toggleDetails(${item.id})" class="mt-4 w-full py-2 text-xs font-semibold text-gray-500 hover:text-legal-blue hover:bg-gray-50 rounded transition-colors border border-gray-200" id="btn-${item.id}">
+                        Показати деталі
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleDetails(id) {
+            const detailBlock = document.getElementById(`details-${id}`);
+            const btn = document.getElementById(`btn-${id}`);
+            
+            if (detailBlock.classList.contains('hidden')) {
+                detailBlock.classList.remove('hidden');
+                btn.innerText = "Сховати деталі";
+                btn.classList.add("bg-gray-100");
+            } else {
+                detailBlock.classList.add('hidden');
+                btn.innerText = "Показати деталі";
+                btn.classList.remove("bg-gray-100");
+            }
+        }
+
+        // --- Simulation Logic ---
+        function runSim(option) {
+            const resultDiv = document.getElementById('sim-result');
+            const optionsDiv = document.getElementById('sim-options');
+            const resetBtn = document.getElementById('sim-reset');
+
+            resultDiv.classList.remove('hidden');
+            optionsDiv.classList.add('hidden');
+            resetBtn.classList.remove('hidden');
+
+            if (option === 1) {
+                // Mistake: Admission
+                resultDiv.innerHTML = `
+                    <div class="text-red-700 font-bold mb-2">Результат: Самозвинувачення</div>
+                    <p class="text-sm">Сказавши "я просто відштовхнув його", ви визнали факт нападу (assault). Навіть якщо ви заявляєте про самозахист, ви надали <em>Actus Reus</em> (винну дію) поліції. Тепер вони можуть заарештувати вас на основі ваших слів.</p>
+                `;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            } else if (option === 2) {
+                // Mistake: Search
+                resultDiv.innerHTML = `
+                    <div class="text-orange-700 font-bold mb-2">Результат: Відмова від прав</div>
+                    <p class="text-sm">Ви відмовилися від прав за Charter s.8. Якщо вони знайдуть <em>будь-що</em> (навіть те, про що ви забули, або файл на телефоні), це тепер є допустимим доказом, бо ви дали згоду. Ви втратили захист.</p>
+                `;
+                resultDiv.className = "mt-4 p-4 rounded bg-orange-50 border border-orange-200";
+            } else if (option === 3) {
+                // Correct
+                resultDiv.innerHTML = `
+                    <div class="text-green-700 font-bold mb-2">Результат: Права захищено</div>
+                    <p class="text-sm">Ідеально. Ви скористалися s.10(b). Поліція повинна припинити допит, доки ви не проконсультуєтеся з адвокатом. Ви не надали жодних доказів проти себе.</p>
+                `;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            }
+        }
+
+        function resetSim() {
+            document.getElementById('sim-result').classList.add('hidden');
+            document.getElementById('sim-options').classList.remove('hidden');
+            document.getElementById('sim-reset').classList.add('hidden');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Architecture of Innocence: A Citizen's Guide to BC Law</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Legal Parchment -->
+    <!-- 
+        Background: #FDFBF7 (Warm, paper-like)
+        Text: #1A202C (Dark Slate)
+        Primary: #2C5282 (Trust Blue)
+        Accent: #C05621 (Caution Orange)
+        Secondary: #718096 (Cool Gray)
+    -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#FDFBF7',
+                        legal: {
+                            blue: '#2C5282',
+                            dark: '#1A202C',
+                            warn: '#C05621',
+                            subtle: '#718096',
+                            highlight: '#EDF2F7'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Merriweather', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Chart Container Styling as per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constraint for large screens */
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px; /* Base height */
+            max-height: 500px;
+        }
+
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        body {
+            background-color: #FDFBF7;
+            color: #1A202C;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .card-shadow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-active {
+            border-bottom: 2px solid #2C5282;
+            color: #2C5282;
+            font-weight: 600;
+        }
+
+        .tab-inactive {
+            color: #718096;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab-inactive:hover {
+            color: #4A5568;
+        }
+    </style>
+
+    <!-- Application Structure Plan: 
+         1. Header & Disclaimer: Establishes the "Citizen Research" tone and legal non-liability.
+         2. Interactive Dashboard (The Landscape of Risk): A scatter plot visualizing the 12 mistakes based on "Commonality" vs. "Consequence Severity". This gives an immediate high-level view of where the dangers lie.
+         3. Thematic Navigation: Grouping the 12 points into "Encounters", "Lifestyle", "Mobility", and "Conflict" for logical consumption rather than a linear list.
+         4. Content Cards: Interactive cards for each point. Users click to reveal the "Mistake" vs. "Smart Citizen" architectural blueprint.
+         5. The "Dialogue Simulator": A simple interactive flow demonstrating the "Right to Silence" in action, reinforcing the hardest lesson (Point 1).
+         6. References: Citations to official sources.
+    -->
+    
+    <!-- Visualization & Content Choices:
+         - Landscape of Risk Chart (Scatter): Goal: Overview. Viz: Chart.js Scatter. Justification: Users need to triage which mistakes are "everyday errors" (shoplifting) vs "catastrophic errors" (border crossing with CBD).
+         - The 12 Pillars (Cards): Goal: Detail. Viz: HTML/CSS Grid. Justification: Readable chunks. Interaction: Expand/Collapse for detail depth.
+         - Decision Tree (HTML): Goal: Practice. Viz: Button flow. Justification: Text-based simulation is safer than abstract diagrams for conversation logic.
+         - NO SVG/Mermaid confirmation: All icons are Unicode or CSS shapes. Charts are Canvas.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-serif font-bold text-legal-blue">The Architecture of Innocence</h1>
+                    <p class="text-sm text-legal-subtle">A Citizen's Guide to Legal Navigation in British Columbia</p>
+                </div>
+                <button onclick="scrollToSection('disclaimer')" class="text-xs bg-legal-warn text-white px-3 py-1 rounded hover:bg-orange-700 transition">
+                    Read Disclaimer
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- Intro Section -->
+        <section class="mb-12 max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-serif font-bold text-gray-900 mb-4">Building a Fortress of Lawfulness</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                The modern legal system is a complex machine. For the "naive" honest citizen—perhaps a new immigrant or simply someone who has never brushed against the law—innocence is not always a shield. Good intentions can lead to disastrous legal outcomes. This guide is a philosophical reflection and a practical checklist on how to avoid "silly" mistakes that carry heavy penalties in Canada and British Columbia.
+            </p>
+            <div id="disclaimer" class="bg-orange-50 border-l-4 border-legal-warn p-4 text-left rounded shadow-sm">
+                <p class="font-bold text-legal-warn text-sm uppercase tracking-wide mb-1">Vital Disclaimer</p>
+                <p class="text-sm text-gray-800">
+                    <strong>This is not legal advice.</strong> This guide is a citizen research project—a self-dialogue on lawful conduct. It is written by a layperson for educational and philosophical exploration. Laws change, and every situation is unique. If you are detained, arrested, or facing legal issues, <strong>consult a lawyer immediately</strong>. Do not rely on this website for your legal defense.
+                </p>
+            </div>
+        </section>
+
+        <!-- Visualization Section: The Landscape of Risk -->
+        <section class="mb-16">
+            <div class="mb-6">
+                <h3 class="text-2xl font-serif font-bold text-gray-900">The Landscape of Risk</h3>
+                <p class="text-gray-600 mt-2 max-w-3xl">
+                    We often underestimate "minor" infractions. This analysis maps 12 common pitfalls based on how easily they occur versus how severe the consequences are. Hover over a bubble to see the legal context.
+                </p>
+            </div>
+            
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+                <div class="mt-4 text-center text-sm text-gray-500 italic">
+                    X-Axis: Likelihood of an "Honest" Mistake &nbsp;|&nbsp; Y-Axis: Severity of Legal Consequences
+                </div>
+            </div>
+        </section>
+
+        <!-- The 12 Pillars of Caution (Tabs & Cards) -->
+        <section class="mb-16">
+            <div class="mb-8">
+                <h3 class="text-2xl font-serif font-bold text-gray-900">The 12 Pillars of Caution</h3>
+                <p class="text-gray-600 mt-2">
+                    Explore the common traps. Select a category to filter the guidance.
+                </p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex flex-wrap border-b border-gray-200 mb-8 overflow-x-auto">
+                <button onclick="filterCards('all')" id="tab-all" class="tab-active px-6 py-3 text-sm font-medium focus:outline-none transition-colors">
+                    All Risks
+                </button>
+                <button onclick="filterCards('police')" id="tab-police" class="tab-inactive px-6 py-3 text-sm font-medium focus:outline-none transition-colors">
+                    Police Encounters
+                </button>
+                <button onclick="filterCards('mobility')" id="tab-mobility" class="tab-inactive px-6 py-3 text-sm font-medium focus:outline-none transition-colors">
+                    Driving & Travel
+                </button>
+                <button onclick="filterCards('conduct')" id="tab-conduct" class="tab-inactive px-6 py-3 text-sm font-medium focus:outline-none transition-colors">
+                    Social & Digital
+                </button>
+                <button onclick="filterCards('safety')" id="tab-safety" class="tab-inactive px-6 py-3 text-sm font-medium focus:outline-none transition-colors">
+                    Self-Defence
+                </button>
+            </div>
+
+            <!-- Grid -->
+            <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards will be injected by JS -->
+            </div>
+        </section>
+
+        <!-- Interactive Simulator: The Right to Silence -->
+        <section class="mb-16 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="p-8 md:p-12">
+                <div class="md:flex md:items-start md:gap-8">
+                    <div class="md:w-1/3 mb-6 md:mb-0">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-4">Simulation: The "Friendly" Chat</h3>
+                        <p class="text-gray-600 mb-4 text-sm">
+                            The most common mistake is talking freely. Police are allowed to lie and pretend to be your friend to get information.
+                        </p>
+                        <div class="bg-blue-50 p-4 rounded text-xs text-legal-blue">
+                            <strong>Principle:</strong> You have the right to remain silent and consult counsel (Charter s.10(b)). Use it.
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-2/3 bg-gray-50 rounded-lg p-6 border border-gray-200 relative">
+                        <!-- Simulation Container -->
+                        <div id="sim-content" class="min-h-[200px] flex flex-col justify-between">
+                            <div id="sim-question" class="font-bold text-lg text-gray-800 mb-6">
+                                Officer: "Hey there, you look a bit nervous. Just tell me what happened so we can clear this up and get you home. Why were you arguing with that guy?"
+                            </div>
+                            
+                            <div id="sim-options" class="grid gap-3">
+                                <button onclick="runSim(1)" class="w-full text-left px-4 py-3 bg-white border border-gray-300 rounded hover:bg-gray-100 transition shadow-sm text-sm">
+                                    A. "I wasn't arguing! He started it, I just pushed him back because I was scared."
+                                </button>
+                                <button onclick="runSim(2)" class="w-full text-left px-4 py-3 bg-white border border-gray-300 rounded hover:bg-gray-100 transition shadow-sm text-sm">
+                                    B. "Look, I have nothing to hide, check my bag, I'm just a student."
+                                </button>
+                                <button onclick="runSim(3)" class="w-full text-left px-4 py-3 bg-white border border-gray-300 rounded hover:bg-gray-100 transition shadow-sm text-sm font-semibold text-legal-blue">
+                                    C. "I would like to remain silent. I would like to speak to a lawyer."
+                                </button>
+                            </div>
+                            
+                            <div id="sim-result" class="hidden mt-4 p-4 rounded bg-white border border-gray-200">
+                                <!-- Result text goes here -->
+                            </div>
+                            
+                            <button id="sim-reset" onclick="resetSim()" class="hidden mt-4 self-start text-xs text-gray-500 underline">Reset Simulation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- References Section -->
+        <section class="border-t border-gray-200 pt-10 pb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">References & Further Reading</h3>
+            <p class="text-sm text-gray-600 mb-4">This research synthesizes public legal information. For authoritative text, consult:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-legal-blue">
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Criminal Code of Canada (R.S.C., 1985, c. C-46)</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Canadian Charter of Rights and Freedoms</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Legal Aid BC - Interaction Guides</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; BC Intimate Images Protection Act</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Canada Border Services Agency (CBSA) Guidelines</a>
+                <a href="#" class="hover:underline flex items-center"><span>&#10148;</span>&nbsp; Motor Vehicle Act (British Columbia)</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400 text-sm mb-2">The Architecture of Innocence &copy; 2025</p>
+            <p class="text-gray-600 text-xs max-w-2xl mx-auto">
+                Disclaimer: This web application is a conceptual project for educational purposes. It attempts to organize public legal information for the "naive" citizen but does not constitute legal counsel. The author is not a lawyer.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Data Store ---
+        // Categories: police, mobility, conduct, safety
+        const cardData = [
+            {
+                id: 1,
+                title: "Talking Freely",
+                category: "police",
+                icon: "🤐",
+                summary: "Waiving the right to silence and counsel.",
+                mistake: "Volunteering detailed statements, trying to 'clarify' facts, or chatting off-the-cuff before speaking with counsel.",
+                law: "Charter s.10(b): Right to retain and instruct counsel without delay.",
+                smart: "Politely state: 'I choose to remain silent. I want to speak to a lawyer.' Then, remain silent.",
+                riskLevel: 0.9, // High risk
+                severity: 0.95
+            },
+            {
+                id: 2,
+                title: "Consent to Search",
+                category: "police",
+                icon: "🎒",
+                summary: "Agreeing to searches because you have 'nothing to hide'.",
+                mistake: "Casually saying 'sure, go ahead' when not legally required. This waives your s.8 Charter protection.",
+                law: "Charter s.8: Protection against unreasonable search and seizure.",
+                smart: "Ask: 'Am I required to let you search?' If no, politely decline. 'I do not consent to a search.'",
+                riskLevel: 0.7,
+                severity: 0.8
+            },
+            {
+                id: 3,
+                title: "Weapons for Defence",
+                category: "safety",
+                icon: "🔪",
+                summary: "Carrying tools with the intent of self-defence.",
+                mistake: "Admitting to police you carry a knife or spray 'for self-defence'. This proves intent for 'dangerous purpose'.",
+                law: "Criminal Code s.88: Possession of weapon for dangerous purpose.",
+                smart: "Do not carry weapons for defence. Tools (knives) are for work/utility. Pepper spray is prohibited if for use on humans.",
+                riskLevel: 0.8,
+                severity: 0.85
+            },
+            {
+                id: 4,
+                title: "Misunderstanding Self-Defence",
+                category: "safety",
+                icon: "🛑",
+                summary: "Retaliation or escalation disguised as defence.",
+                mistake: "Chasing a thief, 'teaching a lesson', or using a weapon in a fist-fight.",
+                law: "Criminal Code s.34: Force must be reasonable in circumstances.",
+                smart: "Disengage when safe. Force must be proportionate and defensive, never vengeful.",
+                riskLevel: 0.6,
+                severity: 0.9
+            },
+            {
+                id: 5,
+                title: "Obstruction",
+                category: "police",
+                icon: "✋",
+                summary: "Physical or verbal interference with police duty.",
+                mistake: "Pulling away during arrest, lying about identity, or physically blocking officers.",
+                law: "Criminal Code s.129: Resist or wilfully obstruct peace officer.",
+                smart: "Do not physically resist even an unlawful arrest. Fight it in court, not on the street.",
+                riskLevel: 0.65,
+                severity: 0.75
+            },
+            {
+                id: 6,
+                title: "Impaired Driving (BC)",
+                category: "mobility",
+                icon: "🍷",
+                summary: "Driving 'buzzed' or refusing samples.",
+                mistake: "Thinking you are 'fine' to drive. Refusing a breathalyzer (criminal offence).",
+                law: "Criminal Code + BC MVA: IRPs (Immediate Roadside Prohibitions) start at 'Warn' levels (0.05).",
+                smart: "Zero tolerance for yourself. Refusing a sample carries the same penalty as a conviction.",
+                riskLevel: 0.5,
+                severity: 0.95
+            },
+            {
+                id: 7,
+                title: "Driving While Prohibited",
+                category: "mobility",
+                icon: "🚫",
+                summary: "Ignoring administrative bans.",
+                mistake: "Driving 'just to work' while suspended. It triggers mandatory jail time on repeat offences.",
+                law: "BC Motor Vehicle Act: $500-$2000 fines, 12mo prohibition, potential jail.",
+                smart: "Respect the paperwork. The system automates license plate checks.",
+                riskLevel: 0.4,
+                severity: 0.8
+            },
+            {
+                id: 8,
+                title: "Breaching Conditions",
+                category: "conduct",
+                icon: "📜",
+                summary: "Ignoring bail or probation terms.",
+                mistake: "Contacting an ex-partner or missing curfew because you made up personally.",
+                law: "Administration of Justice Offences: Breaches are separate criminal charges.",
+                smart: "Only a judge can change conditions. Mutual agreement with the other party is legally void.",
+                riskLevel: 0.6,
+                severity: 0.7
+            },
+            {
+                id: 9,
+                title: "Intimate Images",
+                category: "conduct",
+                icon: "📱",
+                summary: "Sharing nudes without explicit consent.",
+                mistake: "Revenge sharing or forwarding 'joke' images. BC has civil remedies now too.",
+                law: "Criminal Code s.162.1 + BC Intimate Images Protection Act.",
+                smart: "Never share intimate content without clear, ongoing, revocable consent.",
+                riskLevel: 0.5,
+                severity: 0.85
+            },
+            {
+                id: 10,
+                title: "Uttering Threats",
+                category: "conduct",
+                icon: "🤬",
+                summary: "Threatening people, property, or pets.",
+                mistake: "Texting 'I'll smash your car' or 'I'll kill your dog' in anger.",
+                law: "Criminal Code s.264.1: Threats to cause death, harm, or damage property.",
+                smart: "Vent privately. Written threats are permanent evidence of intent.",
+                riskLevel: 0.7,
+                severity: 0.6
+            },
+            {
+                id: 11,
+                title: "Cannabis at Border",
+                category: "mobility",
+                icon: "🛂",
+                summary: "Crossing borders with legal weed/CBD.",
+                mistake: "Bringing a 'legal' joint to the USA or back into Canada.",
+                law: "Customs Act: Illegal to transport cannabis across the border in either direction.",
+                smart: "Purge all cannabis products from luggage/car before any border crossing.",
+                riskLevel: 0.3, // Low frequency for average person, but high consequence
+                severity: 0.95 // Lifetime ban
+            },
+            {
+                id: 12,
+                title: "Minor Theft & Mischief",
+                category: "conduct",
+                icon: "🛒",
+                summary: "Shoplifting or damaging property.",
+                mistake: "'Testing' security, or smashing a phone/wall during an argument (Mischief).",
+                law: "Criminal Code s.334 (Theft) & s.430 (Mischief).",
+                smart: "Respect property rights. Domestic property damage is often charged as Mischief.",
+                riskLevel: 0.8,
+                severity: 0.5
+            }
+        ];
+
+        // --- Chart Initialization ---
+        document.addEventListener('DOMContentLoaded', function() {
+            renderChart();
+            renderCards('all');
+        });
+
+        function renderChart() {
+            const ctx = document.getElementById('riskChart').getContext('2d');
+            
+            // Map data for scatter plot
+            const dataPoints = cardData.map(item => ({
+                x: item.riskLevel, // Likelihood
+                y: item.severity,  // Severity
+                r: 10,             // Radius
+                label: item.title,
+                category: item.category
+            }));
+
+            // Colors based on category
+            const colorMap = {
+                police: '#C53030', // Red
+                mobility: '#DD6B20', // Orange
+                conduct: '#2B6CB0', // Blue
+                safety: '#805AD5'  // Purple
+            };
+
+            new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Risk Landscape',
+                        data: dataPoints,
+                        backgroundColor: (context) => {
+                            const cat = context.raw?.category;
+                            return colorMap[cat] || '#718096';
+                        },
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Likelihood of Mistake (Frequency)' },
+                            min: 0.2,
+                            max: 1.0,
+                            grid: { display: false }
+                        },
+                        y: {
+                            title: { display: true, text: 'Severity of Legal Consequence' },
+                            min: 0.4,
+                            max: 1.0,
+                            grid: { color: '#EDF2F7' } // Subtle grid
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.label;
+                                }
+                            },
+                            backgroundColor: '#1A202C',
+                            titleFont: { family: 'Merriweather' },
+                            bodyFont: { family: 'Inter' }
+                        },
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // --- Card Rendering Logic ---
+        function filterCards(category) {
+            // Update Tab Styles
+            const tabs = ['all', 'police', 'mobility', 'conduct', 'safety'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === category) {
+                    btn.classList.remove('tab-inactive');
+                    btn.classList.add('tab-active');
+                } else {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                }
+            });
+
+            renderCards(category);
+        }
+
+        function renderCards(category) {
+            const grid = document.getElementById('cards-grid');
+            grid.innerHTML = '';
+
+            const filtered = category === 'all' 
+                ? cardData 
+                : cardData.filter(d => d.category === category);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-lg p-6 border border-gray-100 card-shadow flex flex-col justify-between h-full";
+                
+                // Color strip based on category
+                let stripColor = "bg-gray-400";
+                if(item.category === 'police') stripColor = "bg-red-600";
+                if(item.category === 'mobility') stripColor = "bg-orange-500";
+                if(item.category === 'conduct') stripColor = "bg-blue-600";
+                if(item.category === 'safety') stripColor = "bg-purple-600";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-3xl">${item.icon}</div>
+                            <div class="h-1 w-12 ${stripColor} rounded-full"></div>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2 font-serif">${item.title}</h4>
+                        <p class="text-sm text-gray-600 mb-4">${item.summary}</p>
+                        
+                        <div class="hidden" id="details-${item.id}">
+                            <div class="mb-3">
+                                <span class="text-xs font-bold text-red-600 uppercase tracking-wide">The Mistake</span>
+                                <p class="text-sm text-gray-800 bg-red-50 p-2 rounded mt-1">${item.mistake}</p>
+                            </div>
+                            <div class="mb-3">
+                                <span class="text-xs font-bold text-legal-blue uppercase tracking-wide">The Law</span>
+                                <p class="text-xs text-gray-500 mt-1 italic">${item.law}</p>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-green-700 uppercase tracking-wide">The Smart Choice</span>
+                                <p class="text-sm text-gray-800 bg-green-50 p-2 rounded mt-1 border-l-2 border-green-500">${item.smart}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="toggleDetails(${item.id})" class="mt-4 w-full py-2 text-xs font-semibold text-gray-500 hover:text-legal-blue hover:bg-gray-50 rounded transition-colors border border-gray-200" id="btn-${item.id}">
+                        Show Details
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleDetails(id) {
+            const detailBlock = document.getElementById(`details-${id}`);
+            const btn = document.getElementById(`btn-${id}`);
+            
+            if (detailBlock.classList.contains('hidden')) {
+                detailBlock.classList.remove('hidden');
+                btn.innerText = "Hide Details";
+                btn.classList.add("bg-gray-100");
+            } else {
+                detailBlock.classList.add('hidden');
+                btn.innerText = "Show Details";
+                btn.classList.remove("bg-gray-100");
+            }
+        }
+
+        // --- Simulation Logic ---
+        function runSim(option) {
+            const resultDiv = document.getElementById('sim-result');
+            const optionsDiv = document.getElementById('sim-options');
+            const resetBtn = document.getElementById('sim-reset');
+
+            resultDiv.classList.remove('hidden');
+            optionsDiv.classList.add('hidden');
+            resetBtn.classList.remove('hidden');
+
+            if (option === 1) {
+                // Mistake: Admission
+                resultDiv.innerHTML = `
+                    <div class="text-red-700 font-bold mb-2">Outcome: Self-Incrimination</div>
+                    <p class="text-sm">By saying "I just pushed him back," you admitted to an assault. Even if you claim self-defence later, you have provided the <em>Actus Reus</em> (the guilty act) to the police. They can now arrest you based on your own words.</p>
+                `;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            } else if (option === 2) {
+                // Mistake: Search
+                resultDiv.innerHTML = `
+                    <div class="text-orange-700 font-bold mb-2">Outcome: Rights Waived</div>
+                    <p class="text-sm">You waived your s.8 Charter rights. If they find <em>anything</em> (even something you forgot about, or a digital file on a device), it is now admissible evidence because you consented. You lost your leverage.</p>
+                `;
+                resultDiv.className = "mt-4 p-4 rounded bg-orange-50 border border-orange-200";
+            } else if (option === 3) {
+                // Correct
+                resultDiv.innerHTML = `
+                    <div class="text-green-700 font-bold mb-2">Outcome: Rights Protected</div>
+                    <p class="text-sm">Perfect. You exercised s.10(b). The police must now stop questioning you until you consult counsel. You have provided zero evidence against yourself. You have built a fortress around your innocence.</p>
+                `;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            }
+        }
+
+        function resetSim() {
+            document.getElementById('sim-result').classList.add('hidden');
+            document.getElementById('sim-options').classList.remove('hidden');
+            document.getElementById('sim-reset').classList.add('hidden');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
