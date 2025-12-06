@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Architecture of Innocence - Citizen's Guide to BC Law</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Legal Parchment -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#FDFBF7',
+                        legal: {
+                            blue: '#2C5282',
+                            dark: '#1A202C',
+                            warn: '#C05621',
+                            subtle: '#718096',
+                            highlight: '#EDF2F7'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Merriweather', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFBF7;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .resource-link {
+            transition: all 0.2s ease;
+        }
+        
+        .resource-link:hover {
+            background-color: #EDF2F7;
+        }
+    </style>
+</head>
+<body class="font-sans text-legal-dark">
+    <!-- Header -->
+    <header class="bg-legal-blue text-white py-12 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">The Architecture of Innocence</h1>
+            <p class="text-xl md:text-2xl font-light">A Citizen's Guide to British Columbia Law</p>
+            <p class="text-lg mt-2 text-blue-100">Understanding your rights and legal landscape in BC</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Introduction -->
+        <section class="mb-12">
+            <div class="bg-white rounded-lg shadow-md p-8 border-l-4 border-legal-blue">
+                <h2 class="text-3xl font-serif font-bold text-legal-blue mb-4">Welcome</h2>
+                <p class="text-lg text-legal-dark leading-relaxed mb-4">
+                    This resource provides comprehensive guides to help British Columbia citizens understand their legal rights, 
+                    navigate common legal situations, and avoid unintentional violations of the law.
+                </p>
+                <p class="text-lg text-legal-dark leading-relaxed">
+                    Choose from our interactive HTML guides or download PDF versions for offline reference. 
+                    Resources are available in both English and Ukrainian (Українська).
+                </p>
+            </div>
+        </section>
+
+        <!-- Interactive HTML Guides -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-serif font-bold text-legal-blue mb-6 pb-2 border-b-2 border-legal-blue">
+                Interactive Guides
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- English HTML Guide -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover border-t-4 border-legal-blue">
+                    <div class="flex items-start mb-4">
+                        <svg class="w-12 h-12 text-legal-blue mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <div>
+                            <h3 class="text-2xl font-serif font-bold text-legal-dark mb-2">English Guide</h3>
+                            <p class="text-legal-subtle mb-4">Interactive HTML Version</p>
+                        </div>
+                    </div>
+                    <p class="text-legal-dark mb-4 leading-relaxed">
+                        Comprehensive interactive guide covering common legal situations in BC, including:
+                    </p>
+                    <ul class="text-legal-dark mb-6 space-y-2 ml-4">
+                        <li class="flex items-start">
+                            <span class="text-legal-blue mr-2">•</span>
+                            <span>Police interactions and your rights</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-legal-blue mr-2">•</span>
+                            <span>Self-defence and weapon laws</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-legal-blue mr-2">•</span>
+                            <span>Traffic and impaired driving</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-legal-blue mr-2">•</span>
+                            <span>Common legal pitfalls to avoid</span>
+                        </li>
+                    </ul>
+                    <a href="The_Architecture_of_Innocence_Citizen_Guide_BC.html" 
+                       class="inline-block bg-legal-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors">
+                        View Interactive Guide →
+                    </a>
+                </div>
+
+                <!-- Ukrainian HTML Guide -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover border-t-4 border-legal-warn">
+                    <div class="flex items-start mb-4">
+                        <svg class="w-12 h-12 text-legal-warn mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <div>
+                            <h3 class="text-2xl font-serif font-bold text-legal-dark mb-2">Українська версія</h3>
+                            <p class="text-legal-subtle mb-4">Інтерактивна HTML версія</p>
+                        </div>
+                    </div>
+                    <p class="text-legal-dark mb-4 leading-relaxed">
+                        Повний інтерактивний посібник українською мовою, що охоплює:
+                    </p>
+                    <ul class="text-legal-dark mb-6 space-y-2 ml-4">
+                        <li class="flex items-start">
+                            <span class="text-legal-warn mr-2">•</span>
+                            <span>Взаємодія з поліцією та ваші права</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-legal-warn mr-2">•</span>
+                            <span>Самооборона та закони про зброю</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-legal-warn mr-2">•</span>
+                            <span>Дорожній рух та водіння в стані сп'яніння</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-legal-warn mr-2">•</span>
+                            <span>Поширені юридичні пастки</span>
+                        </li>
+                    </ul>
+                    <a href="The_Architecture_of_Innocence_Citizen_Guide_BC_UA.html" 
+                       class="inline-block bg-legal-warn text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors">
+                        Переглянути посібник →
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PDF Downloads -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-serif font-bold text-legal-blue mb-6 pb-2 border-b-2 border-legal-blue">
+                PDF Downloads
+            </h2>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <p class="text-lg text-legal-dark mb-6 leading-relaxed">
+                    Download printable PDF versions for offline access and reference. Perfect for keeping on hand or sharing with others.
+                </p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- English PDF -->
+                    <a href="The Architecture of Innocence Eng.pdf" 
+                       class="resource-link flex items-center p-4 border-2 border-legal-highlight rounded-lg hover:border-legal-blue">
+                        <svg class="w-10 h-10 text-legal-blue mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <div>
+                            <h3 class="text-lg font-semibold text-legal-dark">English PDF</h3>
+                            <p class="text-legal-subtle text-sm">The Architecture of Innocence - Full Guide</p>
+                        </div>
+                    </a>
+
+                    <!-- Ukrainian PDF -->
+                    <a href="The_Architecture_of_Innocence UA.pdf" 
+                       class="resource-link flex items-center p-4 border-2 border-legal-highlight rounded-lg hover:border-legal-warn">
+                        <svg class="w-10 h-10 text-legal-warn mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <div>
+                            <h3 class="text-lg font-semibold text-legal-dark">PDF українською</h3>
+                            <p class="text-legal-subtle text-sm">Архітектура невинності - Повний посібник</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Resources -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-serif font-bold text-legal-blue mb-6 pb-2 border-b-2 border-legal-blue">
+                Additional Resources
+            </h2>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <a href="forensic-truth.html" 
+                   class="resource-link flex items-start p-4 border-2 border-legal-highlight rounded-lg hover:border-legal-blue">
+                    <svg class="w-10 h-10 text-legal-blue mr-4 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <div>
+                        <h3 class="text-xl font-semibold text-legal-dark mb-2">The Evolving Architecture of Truth</h3>
+                        <p class="text-legal-subtle mb-2">Interrogation Frameworks Analysis</p>
+                        <p class="text-legal-dark leading-relaxed">
+                            An in-depth analysis of interrogation techniques and frameworks, exploring the evolution 
+                            of truth-seeking methods in legal contexts.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Important Notice -->
+        <section class="mb-12">
+            <div class="bg-legal-highlight rounded-lg p-6 border-l-4 border-legal-warn">
+                <div class="flex items-start">
+                    <svg class="w-8 h-8 text-legal-warn mr-4 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <div>
+                        <h3 class="text-xl font-semibold text-legal-dark mb-2">Legal Disclaimer</h3>
+                        <p class="text-legal-dark leading-relaxed">
+                            This guide is for informational purposes only and does not constitute legal advice. 
+                            Laws and regulations change, and individual circumstances vary. For specific legal matters, 
+                            please consult with a qualified legal professional in British Columbia.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-legal-dark text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-lg font-serif mb-2">The Architecture of Innocence</p>
+            <p class="text-legal-subtle text-sm">A comprehensive guide to understanding BC law and protecting your rights</p>
+            <p class="text-legal-subtle text-sm mt-4">Licensed under GNU Lesser General Public License v2.1</p>
+        </div>
+    </footer>
+</body>
+</html>
